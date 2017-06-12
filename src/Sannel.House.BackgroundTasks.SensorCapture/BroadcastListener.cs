@@ -46,7 +46,7 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 
 					var entry = new SensorEntry();
 					entry.DeviceId = BitConverter.ToInt32(bits, 0);
-					entry.SensorType = (SensorType)BitConverter.ToInt32(bits, 4);
+					entry.SensorType = (SensorTypes)BitConverter.ToInt32(bits, 4);
 					entry.Value = BitConverter.ToDouble(bits, 8);
 
 					Debug.WriteLine(entry);

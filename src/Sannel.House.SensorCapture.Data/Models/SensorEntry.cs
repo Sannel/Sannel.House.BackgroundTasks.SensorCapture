@@ -12,7 +12,7 @@ namespace Sannel.House.SensorCapture.Data.Models
 		[Key]
 		public Guid LocalId { get; set; }
 
-		public SensorType SensorType { get; set; }
+		public SensorTypes SensorType { get; set; }
 
 		public int DeviceId { get; set; }
 

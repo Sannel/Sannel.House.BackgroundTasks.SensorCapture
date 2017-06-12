@@ -113,7 +113,6 @@
     </Compile>
     <Compile Include="Migrations\DataContextModelSnapshot.cs" />
     <Compile Include="Models\SensorEntry.cs" />
-    <Compile Include="Models\SensorType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Sannel.House.SensorCapture.Data.rd.xml" />
   </ItemGroup>
@@ -130,6 +129,12 @@
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>5.3.3</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Sannel.House.Common\Sannel\Sannel.vcxproj">
+      <Project>{8a91c390-8446-4c5b-8947-8fcc851129f9}</Project>
+      <Name>Sannel</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

@@ -1,0 +1,3 @@
+[submodule "Sannel.House.Common"]
+	path = Sannel.House.Common
+	url = https://github.com/Sannel/Sannel.House.Common.git
