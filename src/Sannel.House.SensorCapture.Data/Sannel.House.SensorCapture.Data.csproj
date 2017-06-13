@@ -111,6 +111,10 @@
     <Compile Include="Migrations\20170609181349_InitialMigration.designer.cs">
       <DependentUpon>20170609181349_InitialMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20170612194756_AddedMoreSensorValues.cs" />
+    <Compile Include="Migrations\20170612194756_AddedMoreSensorValues.designer.cs">
+      <DependentUpon>20170612194756_AddedMoreSensorValues.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\DataContextModelSnapshot.cs" />
     <Compile Include="Models\SensorEntry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -129,12 +133,9 @@
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>5.3.3</Version>
     </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Sannel.House.Common\Sannel\Sannel.vcxproj">
-      <Project>{8a91c390-8446-4c5b-8947-8fcc851129f9}</Project>
-      <Name>Sannel</Name>
-    </ProjectReference>
+    <PackageReference Include="Sannel.House">
+      <Version>0.1.0-dev-0001</Version>
+    </PackageReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

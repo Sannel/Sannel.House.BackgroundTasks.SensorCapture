@@ -140,12 +140,11 @@
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>5.3.3</Version>
     </PackageReference>
+    <PackageReference Include="Sannel.House">
+      <Version>0.1.0-dev-0001</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Sannel.House.Common\Sannel\Sannel.vcxproj">
-      <Project>{8a91c390-8446-4c5b-8947-8fcc851129f9}</Project>
-      <Name>Sannel</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Sannel.House.SensorCapture.Data\Sannel.House.SensorCapture.Data.csproj">
       <Project>{196A4B0E-66CD-4C7E-9279-ED456C929AE5}</Project>
       <Name>Sannel.House.SensorCapture.Data</Name>

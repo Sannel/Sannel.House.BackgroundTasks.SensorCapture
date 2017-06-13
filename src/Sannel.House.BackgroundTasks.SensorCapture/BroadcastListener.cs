@@ -10,6 +10,7 @@ using Windows.Networking.Sockets;
 using System.IO;
 using System.Diagnostics;
 using Sannel.House.SensorCapture.Data.Models;
+using Sannel.House.Sensor;
 
 namespace Sannel.House.BackgroundTasks.SensorCapture
 {
@@ -41,13 +42,29 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 			{
 				using(var s = stream.AsStreamForRead())
 				{
-					var bits = new byte[48];
+					var bits = new byte[80];
 					s.Read(bits, 0, bits.Length);
 
+					var packet = new SensorPacket();
+					packet.Fill(bits);
+
 					var entry = new SensorEntry();
-					entry.DeviceId = BitConverter.ToInt32(bits, 0);
-					entry.SensorType = (SensorTypes)BitConverter.ToInt32(bits, 4);
-					entry.Value = BitConverter.ToDouble(bits, 8);
+					entry.DeviceId = packet.DeviceId;
+					entry.SensorType = packet.SensorType;
+					entry.LocalId = Guid.NewGuid();
+					entry.CreatedDate = DateTime.UtcNow;
+					entry.Value = packet.Values[0];
+					entry.Value2 = packet.Values[1];
+					entry.Value3 = packet.Values[2];
+					entry.Value4 = packet.Values[3];
+					entry.Value5 = packet.Values[4];
+					entry.Value6 = packet.Values[5];
+					entry.Value7 = packet.Values[6];
+					entry.Value8 = packet.Values[7];
+					entry.Value9 = packet.Values[8];
+
+					context.SensorEntries.Add(entry);
+					context.SaveChanges();
 
 					Debug.WriteLine(entry);
 				}

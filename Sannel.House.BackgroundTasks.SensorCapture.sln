@@ -11,6 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\.gitignore = ..\.gitignore
 		build.cake = build.cake
 		Gulpfile.js = Gulpfile.js
+		.nuget\nuget.config = .nuget\nuget.config
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sannel.House.BackgroundTasks.SensorCapture", "src\Sannel.House.BackgroundTasks.SensorCapture\Sannel.House.BackgroundTasks.SensorCapture.csproj", "{65B5CFFB-B93F-4F69-BB08-E8B19806A80F}"
@@ -18,8 +19,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sannel.House.SensorCapture.Data", "src\Sannel.House.SensorCapture.Data\Sannel.House.SensorCapture.Data.csproj", "{196A4B0E-66CD-4C7E-9279-ED456C929AE5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sannel.House.SensorCapture.MigrationDummy", "src\Sannel.House.SensorCapture.MigrationDummy\Sannel.House.SensorCapture.MigrationDummy.csproj", "{907EC2D6-7BC2-4898-9DBF-85EF3CE6D134}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Sannel", "Sannel.House.Common\Sannel\Sannel.vcxproj", "{8A91C390-8446-4C5B-8947-8FCC851129F9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -89,20 +88,6 @@ Global
 		{907EC2D6-7BC2-4898-9DBF-85EF3CE6D134}.Release|x86.ActiveCfg = Release|x86
 		{907EC2D6-7BC2-4898-9DBF-85EF3CE6D134}.Release|x86.Build.0 = Release|x86
 		{907EC2D6-7BC2-4898-9DBF-85EF3CE6D134}.Release|x86.Deploy.0 = Release|x86
-		{8A91C390-8446-4C5B-8947-8FCC851129F9}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{8A91C390-8446-4C5B-8947-8FCC851129F9}.Debug|ARM.ActiveCfg = Debug|ARM
-		{8A91C390-8446-4C5B-8947-8FCC851129F9}.Debug|ARM.Build.0 = Debug|ARM
-		{8A91C390-8446-4C5B-8947-8FCC851129F9}.Debug|x64.ActiveCfg = Debug|x64
-		{8A91C390-8446-4C5B-8947-8FCC851129F9}.Debug|x64.Build.0 = Debug|x64
-		{8A91C390-8446-4C5B-8947-8FCC851129F9}.Debug|x86.ActiveCfg = Debug|Win32
-		{8A91C390-8446-4C5B-8947-8FCC851129F9}.Debug|x86.Build.0 = Debug|Win32
-		{8A91C390-8446-4C5B-8947-8FCC851129F9}.Release|Any CPU.ActiveCfg = Release|Win32
-		{8A91C390-8446-4C5B-8947-8FCC851129F9}.Release|ARM.ActiveCfg = Release|ARM
-		{8A91C390-8446-4C5B-8947-8FCC851129F9}.Release|ARM.Build.0 = Release|ARM
-		{8A91C390-8446-4C5B-8947-8FCC851129F9}.Release|x64.ActiveCfg = Release|x64
-		{8A91C390-8446-4C5B-8947-8FCC851129F9}.Release|x64.Build.0 = Release|x64
-		{8A91C390-8446-4C5B-8947-8FCC851129F9}.Release|x86.ActiveCfg = Release|Win32
-		{8A91C390-8446-4C5B-8947-8FCC851129F9}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -111,6 +96,5 @@ Global
 		{65B5CFFB-B93F-4F69-BB08-E8B19806A80F} = {F84321D6-5C74-4960-AC46-AED4DB263C94}
 		{196A4B0E-66CD-4C7E-9279-ED456C929AE5} = {F84321D6-5C74-4960-AC46-AED4DB263C94}
 		{907EC2D6-7BC2-4898-9DBF-85EF3CE6D134} = {F84321D6-5C74-4960-AC46-AED4DB263C94}
-		{8A91C390-8446-4C5B-8947-8FCC851129F9} = {F84321D6-5C74-4960-AC46-AED4DB263C94}
 	EndGlobalSection
 EndGlobal
