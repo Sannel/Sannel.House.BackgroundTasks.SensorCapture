@@ -29,21 +29,21 @@ namespace Sannel.House.SensorCapture.Data.Migrations
 
                     b.Property<double>("Value");
 
-                    b.Property<double>("Value2");
+                    b.Property<double?>("Value2");
 
-                    b.Property<double>("Value3");
+                    b.Property<double?>("Value3");
 
-                    b.Property<double>("Value4");
+                    b.Property<double?>("Value4");
 
-                    b.Property<double>("Value5");
+                    b.Property<double?>("Value5");
 
-                    b.Property<double>("Value6");
+                    b.Property<double?>("Value6");
 
-                    b.Property<double>("Value7");
+                    b.Property<double?>("Value7");
 
-                    b.Property<double>("Value8");
+                    b.Property<double?>("Value8");
 
-                    b.Property<double>("Value9");
+                    b.Property<double?>("Value9");
 
                     b.HasKey("LocalId");
 

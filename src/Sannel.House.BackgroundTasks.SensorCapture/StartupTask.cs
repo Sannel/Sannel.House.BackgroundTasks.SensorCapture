@@ -34,6 +34,7 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 
 			listener = new BroadcastListener(db);
 			listener.Begin();
+
         }
     }
 }

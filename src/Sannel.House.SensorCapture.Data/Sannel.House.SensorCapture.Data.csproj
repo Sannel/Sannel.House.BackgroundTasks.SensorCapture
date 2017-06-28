@@ -107,13 +107,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="DataContext.cs" />
-    <Compile Include="Migrations\20170609181349_InitialMigration.cs" />
-    <Compile Include="Migrations\20170609181349_InitialMigration.designer.cs">
-      <DependentUpon>20170609181349_InitialMigration.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20170612194756_AddedMoreSensorValues.cs" />
-    <Compile Include="Migrations\20170612194756_AddedMoreSensorValues.designer.cs">
-      <DependentUpon>20170612194756_AddedMoreSensorValues.cs</DependentUpon>
+    <Compile Include="Migrations\20170613193552_InitalMigration.cs" />
+    <Compile Include="Migrations\20170613193552_InitalMigration.designer.cs">
+      <DependentUpon>20170613193552_InitalMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\DataContextModelSnapshot.cs" />
     <Compile Include="Models\SensorEntry.cs" />
@@ -137,6 +133,7 @@
       <Version>0.1.0-dev-0001</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
