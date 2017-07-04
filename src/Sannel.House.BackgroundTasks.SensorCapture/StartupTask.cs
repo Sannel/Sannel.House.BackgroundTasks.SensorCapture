@@ -7,6 +7,7 @@ using Windows.ApplicationModel.Background;
 using Windows.System.Threading;
 using Sannel.House.SensorCapture.Data;
 using Microsoft.EntityFrameworkCore;
+using Sannel.House.Sensor;
 
 // The Background Application template is documented at http://go.microsoft.com/fwlink/?LinkID=533884&clcid=0x409
 
@@ -16,7 +17,8 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
     {
 		private BackgroundTaskDeferral deferral;
 		private ThreadPoolTimer timer;
-		private BroadcastListener listener;
+		private SensorPacketListener listener;
+		private DataContext dataContext;
 
         public void Run(IBackgroundTaskInstance taskInstance)
         {
@@ -29,12 +31,19 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 			//
 			deferral = taskInstance.GetDeferral();
 
-			var db = new DataContext();
-			db.Database.Migrate();
+			dataContext = new DataContext();
+			dataContext.Database.Migrate();
 
-			listener = new BroadcastListener(db);
-			listener.Begin();
+			listener = new SensorPacketListener();
+			listener.PacketReceived += packageReceived;
+			listener.Begin(8172);
 
         }
-    }
+
+		private async void packageReceived(object sender, SensorPacketReceivedEventArgs e)
+		{
+			await dataContext.SensorEntries.AddAsync(e.Packet.ToSensorEntry());
+			await dataContext.SaveChangesAsync();
+		}
+	}
 }
