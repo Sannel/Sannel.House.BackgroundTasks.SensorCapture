@@ -37,7 +37,11 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 			dataContext = new DataContext();
 			dataContext.Database.Migrate();
 
-			uint port = 8175;
+#if DEBUG
+			uint port = Defaults.Development.SENSOR_BROADCAST_PORT;
+#else
+			uint port = Defaults.Production.SENSOR_BROADCAST_PORT;
+#endif
 			Uri serverUri = null;
 			string username = null;
 			string password = null;
@@ -50,7 +54,7 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 					Uri.TryCreate(result["ServerApiUrl"] as string, UriKind.Absolute, out serverUri);
 					username = result["ServerUsername"] as string;
 					password = result["ServerPassword"] as string;
-					port = (uint)(result["SensorsPort"] as int? ?? 8175);
+					port = (uint)(result["SensorsPort"] as int? ?? (int)port);
 				}
 			}
 
@@ -64,7 +68,7 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 				var (lresult, user) = await server.LoginAsync(username, password);
 				if (lresult.Success)
 				{
-					timer = ThreadPoolTimer.CreateTimer(pushToServer, TimeSpan.FromMinutes(1));
+					timer = ThreadPoolTimer.CreateTimer(pushToServer, TimeSpan.FromMinutes(15));
 				}
 			}
 
@@ -82,54 +86,70 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 					await server.RefreshLoginAsync();
 				}
 
-				var count = dataContext.SensorEntries.Count();
-				var sCount = count - 10;
-
-				for (var i = 0; i < count; i += 10)
+				foreach (var entry in dataContext.SensorEntries.OrderBy(j => j.CreatedDate))
 				{
-					sCount = count - i;
-					if (sCount < 0)
+					switch (entry.SensorType)
 					{
-						sCount = 0;
-					}
+						case SensorTypes.Temperature:
+							var tEntry = new TemperatureEntry()
+							{
+								DateCreated = entry.CreatedDate,
+								DeviceId = entry.DeviceId,
+								Id = entry.LocalId,
+								TemperatureCelsius = entry.Value,
+								Pressure = 0,
+								Humidity = 0
+							};
+							var addResult = await server.TemperatureEntries.PostAsync(tEntry);
+							if (addResult.Success)
+							{
+								dataContext.SensorEntries.Remove(entry);
+							}
+							break;
 
-					foreach (var entry in dataContext.SensorEntries.OrderBy(j => j.CreatedDate).Skip(sCount).Take(10))
-					{
-						switch (entry.SensorType)
-						{
-							case SensorTypes.Temperature:
-								var tEntry = new TemperatureEntry()
-								{
-									DateCreated = entry.CreatedDate,
-									DeviceId = entry.DeviceId,
-									Id = entry.LocalId,
-									TemperatureCelsius = entry.Value
-								};
-								var addResult = await server.TemperatureEntries.PostAsync(tEntry);
-								if (addResult.Success)
-								{
-									dataContext.SensorEntries.Remove(entry);
-								}
-								break;
+						case SensorTypes.TemperatureHumidityPresure:
+							var thpEntry = new TemperatureEntry()
+							{
+								DateCreated = entry.CreatedDate,
+								DeviceId = entry.DeviceId,
+								Id = entry.LocalId,
+								TemperatureCelsius = entry.Value,
+								Pressure = entry.Value2 ?? 0,
+								Humidity = entry.Value3 ?? 0
+							};
+							var addTResult = await server.TemperatureEntries.PostAsync(thpEntry);
+							if (addTResult.Success)
+							{
+								dataContext.SensorEntries.Remove(entry);
+							}
+							break;
 
-							case SensorTypes.TemperatureHumidityPresure:
-								var thpEntry = new TemperatureEntry();
-								thpEntry.DateCreated = entry.CreatedDate;
-								thpEntry.DeviceId = entry.DeviceId;
-								thpEntry.Id = entry.LocalId;
-								thpEntry.TemperatureCelsius = entry.Value;
-								thpEntry.Pressure = entry.Value2 ?? 0;
-								thpEntry.Humidity = entry.Value4 ?? 0;
-								var addTResult = await server.TemperatureEntries.PostAsync(thpEntry);
-								if (addTResult.Success)
-								{
-									dataContext.SensorEntries.Remove(entry);
-								}
-								break;
-						}
+						default:
+							var sEntry = new SensorEntry()
+							{
+								DateCreated = entry.CreatedDate,
+								DeviceId = entry.DeviceId,
+								Id = entry.LocalId,
+								SensorType = entry.SensorType,
+								Value = entry.Value,
+								Value2 = entry.Value2,
+								Value3 = entry.Value3,
+								Value4 = entry.Value4,
+								Value5 = entry.Value5,
+								Value6 = entry.Value6,
+								Value7 = entry.Value7,
+								Value8 = entry.Value8,
+								Value9 = entry.Value9
+							};
+							var sResult = await server.SensorEntries.PostAsync(sEntry);
+							if (sResult.Success)
+							{
+								dataContext.SensorEntries.Remove(entry);
+							}
+							break;
 					}
-					await dataContext.SaveChangesAsync();
 				}
+				await dataContext.SaveChangesAsync();
 			}
 			this.timer = ThreadPoolTimer.CreateTimer(pushToServer, timer.Delay);
 		}

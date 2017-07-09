@@ -130,7 +130,7 @@
       <Version>5.3.3</Version>
     </PackageReference>
     <PackageReference Include="Sannel.House">
-      <Version>0.3.0-alpha-0000</Version>
+      <Version>0.3.0-alpha-0001</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup />
