@@ -33,6 +33,7 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 			// described in http://aka.ms/backgroundtaskdeferral
 			//
 			deferral = taskInstance.GetDeferral();
+			taskInstance.Canceled += onCanceled;
 
 			dataContext = new DataContext();
 			dataContext.Database.Migrate();
@@ -75,6 +76,12 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 			username = null;
 			password = null;
 
+		}
+
+		private void onCanceled(IBackgroundTaskInstance sender, BackgroundTaskCancellationReason reason)
+		{
+			dataContext?.Dispose();
+			deferral?.Complete();
 		}
 
 		private async void pushToServer(ThreadPoolTimer timer)
