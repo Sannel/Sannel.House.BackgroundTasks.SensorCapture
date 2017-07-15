@@ -19,7 +19,7 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 	{
 		private BackgroundTaskDeferral deferral;
 		private ThreadPoolTimer timer;
-		private SensorPacketListener listener;
+		private TCPSensorPacketListener listener;
 		private DataContext dataContext;
 		private ServerContext server;
 
@@ -59,7 +59,7 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 				}
 			}
 
-			listener = new SensorPacketListener();
+			listener = new TCPSensorPacketListener();
 			listener.PacketReceived += packageReceived;
 			listener.Begin(port);
 
