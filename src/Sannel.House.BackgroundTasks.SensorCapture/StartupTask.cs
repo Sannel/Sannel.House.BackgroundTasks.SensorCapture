@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Sannel.House.Sensor;
 using Sannel.House.ServerSDK;
 using Sannel.House.ServerSDK.Models;
+using System.Diagnostics;
 
 // The Background Application template is documented at http://go.microsoft.com/fwlink/?LinkID=533884&clcid=0x409
 
@@ -22,6 +23,7 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 		private TCPSensorPacketListener listener;
 		private DataContext dataContext;
 		private ServerContext server;
+		private bool isTaskRunning = false;
 
 		public async void Run(IBackgroundTaskInstance taskInstance)
 		{
@@ -69,7 +71,7 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 				var (lresult, user) = await server.LoginAsync(username, password);
 				if (lresult.Success)
 				{
-					timer = ThreadPoolTimer.CreateTimer(pushToServer, TimeSpan.FromMinutes(15));
+					timer = ThreadPoolTimer.CreatePeriodicTimer(pushToServer, TimeSpan.FromMinutes(15));
 				}
 			}
 
@@ -86,85 +88,103 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 
 		private async void pushToServer(ThreadPoolTimer timer)
 		{
-			if (server != null)
+			if (!isTaskRunning)
 			{
-				if (!server.IsAuthenticated)
+				isTaskRunning = true;
+				try
 				{
-					await server.RefreshLoginAsync();
-				}
-
-				foreach (var entry in dataContext.SensorEntries.OrderBy(j => j.CreatedDate))
-				{
-					switch (entry.SensorType)
+					if (server != null)
 					{
-						case SensorTypes.Temperature:
-							var tEntry = new TemperatureEntry()
-							{
-								DateCreated = entry.CreatedDate,
-								DeviceId = entry.DeviceId,
-								Id = entry.LocalId,
-								TemperatureCelsius = entry.Value,
-								Pressure = 0,
-								Humidity = 0
-							};
-							var addResult = await server.TemperatureEntries.PostAsync(tEntry);
-							if (addResult.Success)
-							{
-								dataContext.SensorEntries.Remove(entry);
-							}
-							break;
+						if (!server.IsAuthenticated)
+						{
+							await server.RefreshLoginAsync();
+						}
 
-						case SensorTypes.TemperatureHumidityPresure:
-							var thpEntry = new TemperatureEntry()
+						foreach (var entry in dataContext.SensorEntries.OrderBy(j => j.CreatedDate))
+						{
+							switch (entry.SensorType)
 							{
-								DateCreated = entry.CreatedDate,
-								DeviceId = entry.DeviceId,
-								Id = entry.LocalId,
-								TemperatureCelsius = entry.Value,
-								Pressure = entry.Value2 ?? 0,
-								Humidity = entry.Value3 ?? 0
-							};
-							var addTResult = await server.TemperatureEntries.PostAsync(thpEntry);
-							if (addTResult.Success)
-							{
-								dataContext.SensorEntries.Remove(entry);
-							}
-							break;
+								case SensorTypes.Temperature:
+									var tEntry = new TemperatureEntry()
+									{
+										DateCreated = entry.CreatedDate,
+										DeviceId = entry.DeviceId,
+										Id = entry.LocalId,
+										TemperatureCelsius = entry.Value,
+										Pressure = null,
+										Humidity = null
+									};
+									var addResult = await server.TemperatureEntries.PostAsync(tEntry);
+									if (addResult.Success)
+									{
+										dataContext.SensorEntries.Remove(entry);
+									}
+									break;
 
-						default:
-							var sEntry = new SensorEntry()
-							{
-								DateCreated = entry.CreatedDate,
-								DeviceId = entry.DeviceId,
-								Id = entry.LocalId,
-								SensorType = entry.SensorType,
-								Value = entry.Value,
-								Value2 = entry.Value2,
-								Value3 = entry.Value3,
-								Value4 = entry.Value4,
-								Value5 = entry.Value5,
-								Value6 = entry.Value6,
-								Value7 = entry.Value7,
-								Value8 = entry.Value8,
-								Value9 = entry.Value9
-							};
-							var sResult = await server.SensorEntries.PostAsync(sEntry);
-							if (sResult.Success)
-							{
-								dataContext.SensorEntries.Remove(entry);
+								case SensorTypes.TemperatureHumidityPresure:
+									var thpEntry = new TemperatureEntry()
+									{
+										DateCreated = entry.CreatedDate,
+										DeviceId = entry.DeviceId,
+										Id = entry.LocalId,
+										TemperatureCelsius = entry.Value,
+										Pressure = entry.Value2,
+										Humidity = entry.Value3
+									};
+									var addTResult = await server.TemperatureEntries.PostAsync(thpEntry);
+									if (addTResult.Success)
+									{
+										dataContext.SensorEntries.Remove(entry);
+									}
+									break;
+
+								default:
+									var sEntry = new SensorEntry()
+									{
+										DateCreated = entry.CreatedDate,
+										DeviceId = entry.DeviceId,
+										Id = entry.LocalId,
+										SensorType = entry.SensorType,
+										Value = entry.Value,
+										Value2 = entry.Value2,
+										Value3 = entry.Value3,
+										Value4 = entry.Value4,
+										Value5 = entry.Value5,
+										Value6 = entry.Value6,
+										Value7 = entry.Value7,
+										Value8 = entry.Value8,
+										Value9 = entry.Value9
+									};
+									var sResult = await server.SensorEntries.PostAsync(sEntry);
+									if (sResult.Success)
+									{
+										dataContext.SensorEntries.Remove(entry);
+									}
+									break;
 							}
-							break;
+						}
+						await dataContext.SaveChangesAsync();
 					}
 				}
-				await dataContext.SaveChangesAsync();
+				catch(Exception ex)
+				{
+					Debug.WriteLine(ex);
+				}
+				isTaskRunning = false;
 			}
-			this.timer = ThreadPoolTimer.CreateTimer(pushToServer, timer.Delay);
 		}
 
 		private async void packageReceived(object sender, SensorPacketReceivedEventArgs e)
 		{
-			await dataContext.SensorEntries.AddAsync(e.Packet.ToSensorEntry());
-			await dataContext.SaveChangesAsync();
+			try
+			{
+				await dataContext.SensorEntries.AddAsync(e.Packet.ToSensorEntry());
+				await dataContext.SaveChangesAsync();
+			}
+			catch(Exception ex)
+			{
+				Debug.WriteLine(ex);
+			}
 		}
 	}
 }
