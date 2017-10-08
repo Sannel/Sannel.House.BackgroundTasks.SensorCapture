@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -15,7 +15,7 @@ namespace Sannel.House.SensorCapture.Data.Models
 
 		public SensorTypes SensorType { get; set; }
 
-		public int DeviceId { get; set; }
+		public long MacAddress { get; set; }
 
 		public double Value { get; set; }
 
@@ -27,12 +27,13 @@ namespace Sannel.House.SensorCapture.Data.Models
 		public double? Value7 { get; set; }
 		public double? Value8 { get; set; }
 		public double? Value9 { get; set; }
+		public double? Value10 { get; set; }
 
 		public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
 
 		public override string ToString()
 		{
-			return $"LocalId {LocalId}, SensorType {SensorType}, DeviceId {DeviceId}, Value = {Value}, CreatedDate = {CreatedDate}";
+			return $"LocalId {LocalId}, SensorType {SensorType}, DeviceId DeviceId, Value = {Value}, CreatedDate = {CreatedDate}";
 		}
 	}
 }
