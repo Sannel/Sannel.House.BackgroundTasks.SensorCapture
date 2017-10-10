@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Sannel.House.Configuration;
 using Sannel.House.Sensor;
 using Sannel.House.SensorCapture.Data;
@@ -20,19 +21,22 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 		private TCPSensorPacketListener listener;
 		private ServerContext serverContext;
 		private ThreadPoolTimer timer;
+		private ILogger<ReadingsManager> logger;
 		private string username;
 		private string password;
 
 		public ReadingsManager(
 			DataContext context,
 			ConfigurationConnection configuration,
-			TCPSensorPacketListener listener
+			TCPSensorPacketListener listener,
+			ILogger<ReadingsManager> logger
 			)
 		{
 			this.context = context;
 			this.context.Database.Migrate();
 			this.connection = configuration;
 			this.listener = listener;
+			this.logger = logger;
 		}
 
 		public async Task StartAsync()
@@ -60,27 +64,43 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 
 			connection = null;
 
+			logger.LogDebug("ServerApiUrl {0}", serverUri);
+			logger.LogDebug("Listen Port {0}", port);
+			logger.LogDebug("Username {0}", username);
+			logger.LogDebug("Password Length {0}", password?.Length);
+
 			listener.PacketReceived += this.packagesReceived;
 			listener.Begin(port);
 
 			if (serverUri != null)
 			{
 				serverContext = new ServerContext(serverUri);
-				timer = ThreadPoolTimer.CreateTimer(pushToServer, TimeSpan.FromMinutes(15));
+				pushToServer(null);
 			}
 		}
 		private async void pushToServer(ThreadPoolTimer timer)
 		{
+			logger.LogInformation("Pushing to Server");
 			if(serverContext != null)
 			{
 				try
 				{
 					if (!serverContext.IsAuthenticated)
 					{
+						logger.LogDebug("Not logged in to server. Attempting to refresh from token");
 						var (status, user) = await serverContext.RefreshLoginAsync();
 						if (!status.Success)
 						{
+							logger.LogDebug("Unable to refresh from token. Logging in with username and password");
 							(status, user) = await serverContext.LoginAsync(username, password);
+							if (status.Success)
+							{
+								logger.LogDebug("Logged in with user {0}", user);
+							}
+							else
+							{
+								logger.LogDebug("Unable to login");
+							}
 						}
 					}
 
@@ -161,7 +181,7 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 			{
 				uint lastOffset = 0;
 				var lastDateTime = DateTime.UtcNow;
-				for(var i = e.Packets.Count; i >= 0; i--)
+				for(var i = e.Packets.Count - 1; i >= 0; i--)
 				{
 					var p = e.Packets[i];
 					var entry = p.ToSensorEntry(e.MacAddress);
@@ -181,9 +201,8 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 					context.SensorEntries.Add(entry);
 				}
 			}
-			catch
+			catch(Exception ex)
 			{
-
 			}
 			finally
 			{

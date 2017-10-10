@@ -11,6 +11,7 @@ using Sannel.House.Sensor;
 using Sannel.House.ServerSDK;
 using Sannel.House.ServerSDK.Models;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 // The Background Application template is documented at http://go.microsoft.com/fwlink/?LinkID=533884&clcid=0x409
 
@@ -35,11 +36,16 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 
 			var serviceCollection = new ServiceCollection();
 
+			serviceCollection.AddLogging();
 			serviceCollection.AddDbContext<DataContext>(options => options.UseSqlite("Data Source=SensorEntries.db"));
 			serviceCollection.AddTransient<Configuration.ConfigurationConnection>();
 			serviceCollection.AddTransient<TCPSensorPacketListener>();
 			serviceCollection.AddTransient<ReadingsManager>();
+
+
 			var provider = serviceCollection.BuildServiceProvider();
+			var loggerFactory = provider.GetService<ILoggerFactory>();
+			loggerFactory.AddDebug(LogLevel.Trace);
 
 			manager = provider.GetService<ReadingsManager>();
 			await manager.StartAsync();
