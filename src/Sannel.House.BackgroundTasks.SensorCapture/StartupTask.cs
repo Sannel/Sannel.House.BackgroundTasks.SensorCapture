@@ -12,6 +12,7 @@ using Sannel.House.ServerSDK;
 using Sannel.House.ServerSDK.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 
 // The Background Application template is documented at http://go.microsoft.com/fwlink/?LinkID=533884&clcid=0x409
 
@@ -45,7 +46,10 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 
 			var provider = serviceCollection.BuildServiceProvider();
 			var loggerFactory = provider.GetService<ILoggerFactory>();
-			loggerFactory.AddDebug(LogLevel.Trace);
+			if (Debugger.IsAttached)
+			{
+				loggerFactory.AddDebug(LogLevel.Trace);
+			}
 
 			manager = provider.GetService<ReadingsManager>();
 			await manager.StartAsync();
