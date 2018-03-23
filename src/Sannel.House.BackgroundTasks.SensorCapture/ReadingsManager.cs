@@ -1,5 +1,5 @@
+using Microsoft.Azure.Mobile.Analytics;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Sannel.House.Configuration;
 using Sannel.House.Sensor;
 using Sannel.House.SensorCapture.Data;
@@ -21,22 +21,18 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 		private TCPSensorPacketListener listener;
 		private ServerContext serverContext;
 		private ThreadPoolTimer timer;
-		private ILogger<ReadingsManager> logger;
 		private string username;
 		private string password;
 
 		public ReadingsManager(
 			DataContext context,
 			ConfigurationConnection configuration,
-			TCPSensorPacketListener listener,
-			ILogger<ReadingsManager> logger
-			)
+			TCPSensorPacketListener listener)
 		{
 			this.context = context;
 			this.context.Database.Migrate();
 			this.connection = configuration;
 			this.listener = listener;
-			this.logger = logger;
 		}
 
 		public async Task StartAsync()
@@ -64,10 +60,12 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 
 			connection = null;
 
-			logger.LogDebug("ServerApiUrl {0}", serverUri);
-			logger.LogDebug("Listen Port {0}", port);
-			logger.LogDebug("Username {0}", username);
-			logger.LogDebug("Password Length {0}", password?.Length);
+			Analytics.TrackEvent("Configuration", new Dictionary<string, string>()
+			{
+				{"ServerApiUrl", serverUri.ToString() },
+				{"Listen Port", port.ToString() },
+				{"Username", username }
+			});
 
 			listener.PacketReceived += this.packagesReceived;
 			listener.Begin(port);
@@ -80,30 +78,38 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 		}
 		private async void pushToServer(ThreadPoolTimer timer)
 		{
-			logger.LogInformation("Pushing to Server");
+			Analytics.TrackEvent("Start Push To Server");
 			if(serverContext != null)
 			{
 				try
 				{
 					if (!serverContext.IsAuthenticated)
 					{
-						logger.LogDebug("Not logged in to server. Attempting to refresh from token");
+						Analytics.TrackEvent("Not logged in to server. Attempting to refresh from token");
 						var (status, user) = await serverContext.RefreshLoginAsync();
 						if (!status.Success)
 						{
-							logger.LogDebug("Unable to refresh from token. Logging in with username and password");
+							Analytics.TrackEvent("Unable to refresh from token. Logging in with username and password");
 							(status, user) = await serverContext.LoginAsync(username, password);
 							if (status.Success)
 							{
-								logger.LogDebug("Logged in with user {0}", user);
+								Analytics.TrackEvent("Logged in with user {0}", new Dictionary<string, string>()
+								{
+									{ "User", user.Name }
+								});
 							}
 							else
 							{
-								logger.LogDebug("Unable to login");
+								Analytics.TrackEvent("Unable to login");
 							}
 						}
 					}
 
+					Analytics.TrackEvent("Sending Events to server",
+					new Dictionary<string, string>()
+					{
+						{ "Count", $"{await context.SensorEntries.CountAsync()}" }
+					});
 					foreach (var entry in context.SensorEntries)
 					{
 						switch (entry.SensorType)
@@ -163,10 +169,16 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 					}
 
 					await context.SaveChangesAsync();
+					Analytics.TrackEvent("Events sent to server");
 				}
-				catch
+				catch(Exception ex)
 				{
-
+					Analytics.TrackEvent("Exception trying to send data to server",
+						new Dictionary<string, string>()
+						{
+							{ "Exception", ex.ToString() }
+						}
+					);
 				}
 				finally
 				{
@@ -179,6 +191,7 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 		{
 			try
 			{
+				Analytics.TrackEvent("Begin Receiving Packages");
 				uint lastOffset = 0;
 				var lastDateTime = DateTime.UtcNow;
 				for(var i = e.Packets.Count - 1; i >= 0; i--)
@@ -200,9 +213,15 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 
 					context.SensorEntries.Add(entry);
 				}
+
+				Analytics.TrackEvent("Finished Receiving Packages");
 			}
 			catch(Exception ex)
 			{
+				Analytics.TrackEvent("Exception in package capture", new Dictionary<string, string>()
+				{
+					{ "Exception", ex.ToString() }
+				});
 			}
 			finally
 			{

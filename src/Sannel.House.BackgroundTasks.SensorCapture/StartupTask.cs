@@ -11,8 +11,11 @@ using Sannel.House.Sensor;
 using Sannel.House.ServerSDK;
 using Sannel.House.ServerSDK.Models;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using System.Diagnostics;
+using Microsoft.Extensions.Configuration;
+using Windows.Storage;
+using Microsoft.Azure.Mobile;
+using Microsoft.Azure.Mobile.Analytics;
 
 // The Background Application template is documented at http://go.microsoft.com/fwlink/?LinkID=533884&clcid=0x409
 
@@ -34,6 +37,8 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 			//
 			deferral = taskInstance.GetDeferral();
 			taskInstance.Canceled += onCanceled;
+			MobileCenter.Start("", typeof(Analytics));
+			Analytics.TrackEvent("Background Task Started");
 
 			var serviceCollection = new ServiceCollection();
 
@@ -45,11 +50,6 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 
 
 			var provider = serviceCollection.BuildServiceProvider();
-			var loggerFactory = provider.GetService<ILoggerFactory>();
-			if (Debugger.IsAttached)
-			{
-				loggerFactory.AddDebug(LogLevel.Trace);
-			}
 
 			manager = provider.GetService<ReadingsManager>();
 			await manager.StartAsync();
@@ -57,6 +57,10 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 
 		private void onCanceled(IBackgroundTaskInstance sender, BackgroundTaskCancellationReason reason)
 		{
+			Analytics.TrackEvent("Background Task Canceled", new Dictionary<string, string>
+			{
+				{"Reason", reason.ToString() }
+			});
 			manager?.Dispose();
 			deferral?.Complete();
 		}
