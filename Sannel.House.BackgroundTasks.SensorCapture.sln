@@ -9,7 +9,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 		.gitignore = .gitignore
-		.nuget\nuget.config = .nuget\nuget.config
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sannel.House.BackgroundTasks.SensorCapture", "src\Sannel.House.BackgroundTasks.SensorCapture\Sannel.House.BackgroundTasks.SensorCapture.csproj", "{65B5CFFB-B93F-4F69-BB08-E8B19806A80F}"
@@ -20,7 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sannel.House.SensorCaptureS
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sannel.House.SensorCapture.Data", "src\Sannel.House.SensorCapture.Data\Sannel.House.SensorCapture.Data.csproj", "{0E7227D2-109A-450F-8E98-01B5CDC7DBEA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sannel.House.SensorCapture.Common", "src\Sannel.House.SensorCapture.Common\Sannel.House.SensorCapture.Common.csproj", "{B5E19CD6-C029-4DBD-95B2-E5C65C31F01E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sannel.House.SensorCapture.Common", "src\Sannel.House.SensorCapture.Common\Sannel.House.SensorCapture.Common.csproj", "{B5E19CD6-C029-4DBD-95B2-E5C65C31F01E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
