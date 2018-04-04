@@ -1,5 +1,5 @@
 using Sannel.House.Sensor;
-using Sannel.House.SensorCapture.Data.Models;
+using Sannel.House.SensorCapture.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;

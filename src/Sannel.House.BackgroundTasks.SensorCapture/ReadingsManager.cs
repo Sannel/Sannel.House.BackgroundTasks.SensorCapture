@@ -112,6 +112,19 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 					});
 					foreach (var entry in context.SensorEntries)
 					{
+						int? deviceId = null;
+						if(entry.MacAddress == null && entry.Uuid != null)
+						{
+							var altResult = await serverContext.AlternateDeviceIds.GetFromSystemUuidAsync(entry.Uuid.Value);
+							if (altResult.Success)
+							{
+								deviceId = altResult.Data.DeviceId;
+							}
+							else
+							{
+								continue; // errored out go to next result
+							}
+						}
 						switch (entry.SensorType)
 						{
 							case SensorTypes.Temperature:
@@ -121,6 +134,10 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 									DateCreated = entry.CreatedDate,
 									TemperatureCelsius = entry.Value
 								};
+								if (deviceId.HasValue)
+								{
+									tentry.DeviceId = deviceId.Value;
+								}
 								var status = await serverContext.TemperatureEntries.PostAsync(tentry);
 								if (status.Success)
 								{
@@ -136,6 +153,10 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 									Humidity = entry.Value2,
 									Pressure = entry.Value3
 								};
+								if (deviceId.HasValue)
+								{
+									tentry2.DeviceId = deviceId.Value;
+								}
 								var status2 = await serverContext.TemperatureEntries.PostAsync(tentry2);
 								if (status2.Success)
 								{
@@ -159,6 +180,11 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 									Value10 = entry.Value10,
 									SensorType = entry.SensorType
 								};
+
+								if (deviceId.HasValue)
+								{
+									sentry.DeviceId = deviceId.Value;
+								}
 								var status3 = await serverContext.SensorEntries.PostAsync(sentry);
 								if (status3.Success)
 								{
@@ -187,17 +213,20 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 			}
 		}
 
-		private void packagesReceived(object sender, SensorPacketsReceivedEventArgs e)
+		private async void packagesReceived(object sender, SensorPacketsReceivedEventArgs e) 
+			=> await ProcessPackatesAsync(e.MacAddress, e.Packets);
+
+		public async Task ProcessPackatesAsync(long macAddress, IList<SensorPacket> packets)
 		{
 			try
 			{
 				Analytics.TrackEvent("Begin Receiving Packages");
 				uint lastOffset = 0;
 				var lastDateTime = DateTime.UtcNow;
-				for(var i = e.Packets.Count - 1; i >= 0; i--)
+				for(var i = packets.Count - 1; i >= 0; i--)
 				{
-					var p = e.Packets[i];
-					var entry = p.ToSensorEntry(e.MacAddress);
+					var p = packets[i];
+					var entry = p.ToSensorEntry(macAddress);
 
 					if(lastOffset == 0)
 					{
@@ -211,7 +240,7 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 						entry.CreatedDate = lastDateTime;
 					}
 
-					context.SensorEntries.Add(entry);
+					await context.SensorEntries.AddAsync(entry);
 				}
 
 				Analytics.TrackEvent("Finished Receiving Packages");
@@ -225,7 +254,7 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 			}
 			finally
 			{
-				context.SaveChanges();
+				await context.SaveChangesAsync();
 			}
 		}
 

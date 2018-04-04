@@ -1,6 +1,6 @@
+using Microsoft.EntityFrameworkCore.Migrations;
 using System;
 using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Sannel.House.SensorCapture.Data.Migrations
 {
@@ -14,8 +14,9 @@ namespace Sannel.House.SensorCapture.Data.Migrations
 				{
 					LocalId = table.Column<Guid>(nullable: false),
 					CreatedDate = table.Column<DateTime>(nullable: false),
-					MacAddress = table.Column<long>(nullable: false),
+					MacAddress = table.Column<long>(nullable: true),
 					SensorType = table.Column<int>(nullable: false),
+					Uuid = table.Column<Guid>(nullable: true),
 					Value = table.Column<double>(nullable: false),
 					Value10 = table.Column<double>(nullable: true),
 					Value2 = table.Column<double>(nullable: true),

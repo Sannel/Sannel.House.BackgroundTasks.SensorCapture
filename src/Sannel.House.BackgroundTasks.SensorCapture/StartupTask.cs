@@ -37,21 +37,9 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 			//
 			deferral = taskInstance.GetDeferral();
 			taskInstance.Canceled += onCanceled;
-			MobileCenter.Start("", typeof(Analytics));
-			Analytics.TrackEvent("Background Task Started");
 
-			var serviceCollection = new ServiceCollection();
-
-			serviceCollection.AddLogging();
-			serviceCollection.AddDbContext<DataContext>(options => options.UseSqlite("Data Source=SensorEntries.db"));
-			serviceCollection.AddTransient<Configuration.ConfigurationConnection>();
-			serviceCollection.AddTransient<TCPSensorPacketListener>();
-			serviceCollection.AddTransient<ReadingsManager>();
-
-
-			var provider = serviceCollection.BuildServiceProvider();
-
-			manager = provider.GetService<ReadingsManager>();
+			var v = Startup.Instance.Value;
+			manager = v.Provider.GetService<ReadingsManager>();
 			await manager.StartAsync();
 		}
 
@@ -61,7 +49,6 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 			{
 				{"Reason", reason.ToString() }
 			});
-			manager?.Dispose();
 			deferral?.Complete();
 		}
 	}

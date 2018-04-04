@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
-using Sannel.House.SensorCapture.Data.Models;
+using Sannel.House.SensorCapture.Common;
 
 namespace Sannel.House.SensorCapture.Data
 {

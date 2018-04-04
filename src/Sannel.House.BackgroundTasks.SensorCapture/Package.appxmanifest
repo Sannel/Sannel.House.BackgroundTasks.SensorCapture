@@ -27,6 +27,9 @@
             <iot:Task Type="startup" />
           </BackgroundTasks>
         </Extension>
+        <uap:Extension Category="windows.appService" EntryPoint="Sannel.House.BackgroundTasks.SensorCapture.AppMessageTask">
+          <uap:AppService Name="com.sannel.house.sensorcapture" />
+        </uap:Extension>
       </Extensions>
     </Application>
   </Applications>

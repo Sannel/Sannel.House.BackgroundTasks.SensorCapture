@@ -1,0 +1,1 @@
+nuget.exe restore Sannel.House.BackgroundTasks.SensorCapture.sln -Verbosity Detailed -NonInteractive -ConfigFile .\.nuget\nuget.config

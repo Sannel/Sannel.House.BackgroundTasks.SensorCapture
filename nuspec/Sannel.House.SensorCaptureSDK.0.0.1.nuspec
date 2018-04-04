@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Sannel.House.SensorCaptureSDK</id>
+    <version>0.0.1</version>
+    <authors>Adam Holt</authors>
+    <owners>Adam Holt</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+    <projectUrl>https://github.com/Sannel/Sannel.House.BackgroundTasks.SensorCapture</projectUrl>
+    <description>The SDK for logging sensor entries in UWP apps.</description>
+    <summary>The SDK for logging sensor entries in UWP apps.</summary>
+    <dependencies>
+      <dependency id="Newtonsoft.Json" version="10.0.0" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="..\src\Sannel.House.SensorCaptureSDK\bin\Release\Sannel.House.SensorCapture.Common.dll" target="lib\uap10.0\Sannel.House.SensorCapture.Common.dll" />
+    <file src="..\src\Sannel.House.SensorCaptureSDK\bin\Release\Sannel.House.SensorCapture.Common.pdb" target="lib\uap10.0\Sannel.House.SensorCapture.Common.pdb" />
+    <file src="..\src\Sannel.House.SensorCaptureSDK\bin\Release\Sannel.House.SensorCaptureSDK.pdb" target="lib\uap10.0\Sannel.House.SensorCaptureSDK.pdb" />
+    <file src="..\src\Sannel.House.SensorCaptureSDK\bin\Release\Sannel.House.SensorCaptureSDK.pri" target="lib\uap10.0\Sannel.House.SensorCaptureSDK.pri" />
+    <file src="..\src\Sannel.House.SensorCaptureSDK\bin\Release\Sannel.House.SensorCaptureSDK.winmd" target="lib\uap10.0\Sannel.House.SensorCaptureSDK.winmd" />
+  </files>
+</package>
