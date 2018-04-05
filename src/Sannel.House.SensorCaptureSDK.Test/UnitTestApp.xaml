@@ -1,8 +1,0 @@
-﻿<Application
-    x:Class="Sannel.House.SensorCaptureSDK.Test.App"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Sannel.House.SensorCaptureSDK.Test"
-    RequestedTheme="Light">
-
-</Application>
