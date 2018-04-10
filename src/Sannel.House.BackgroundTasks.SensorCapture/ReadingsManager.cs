@@ -1,5 +1,4 @@
 using Microsoft.AppCenter.Analytics;
-using Microsoft.Azure.Mobile.Analytics;
 using Microsoft.EntityFrameworkCore;
 using Sannel.House.Configuration;
 using Sannel.House.Sensor;
