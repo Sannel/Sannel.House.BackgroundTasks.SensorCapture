@@ -14,8 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Windows.Storage;
-using Microsoft.Azure.Mobile;
-using Microsoft.Azure.Mobile.Analytics;
+using Microsoft.AppCenter.Analytics;
 
 // The Background Application template is documented at http://go.microsoft.com/fwlink/?LinkID=533884&clcid=0x409
 
@@ -38,7 +37,10 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 			deferral = taskInstance.GetDeferral();
 			taskInstance.Canceled += onCanceled;
 
-			var v = Startup.Instance.Value;
+			var v = await Startup.GetStartupAsync();
+
+			Analytics.TrackEvent("BackgroundTask Started");
+
 			manager = v.Provider.GetService<ReadingsManager>();
 			await manager.StartAsync();
 		}

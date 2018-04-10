@@ -8,11 +8,12 @@ using System.Threading.Tasks;
 using Windows.ApplicationModel.AppService;
 using Windows.ApplicationModel.Background;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Azure.Mobile.Analytics;
 using Windows.Devices.WiFi;
 using Windows.Networking.Connectivity;
 using Sannel.House.SensorCapture.Common;
 using Sannel.House.SensorCapture.Data;
+using Microsoft.AppCenter.Analytics;
+using Sannel.House.Configuration.Common;
 
 namespace Sannel.House.BackgroundTasks.SensorCapture
 {
@@ -21,12 +22,13 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 		private BackgroundTaskDeferral deferral;
 		private DataContext context;
 
-		public void Run(IBackgroundTaskInstance taskInstance)
+		public async void Run(IBackgroundTaskInstance taskInstance)
 		{
 			taskInstance.Canceled += this.canceled;
 			deferral = taskInstance.GetDeferral();
 
-			var v = Startup.Instance.Value;
+			var v = await Startup.GetStartupAsync();
+			Analytics.TrackEvent("AppMessageTask startup");
 			context = v.Provider.GetService<DataContext>();
 
 			var td = taskInstance.TriggerDetails as AppServiceTriggerDetails;
@@ -36,12 +38,14 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 
 		private async void requestReceived(AppServiceConnection sender, AppServiceRequestReceivedEventArgs args)
 		{
+			Analytics.TrackEvent("AppMessage request Received");
 			var messageDeferral = args.GetDeferral();
 			try
 			{
 				var message = args.Request.Message;
 				if(message.ContainsKey(nameof(SensorEntry)) && message[nameof(SensorEntry)] is string data)
 				{
+					Analytics.TrackEvent("AppMessage SensorEntry Received");
 					var entry = await Task.Run(() => JsonConvert.DeserializeObject<SensorEntry>(data));
 					if(entry != null)
 					{
@@ -49,9 +53,14 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 						await context.SensorEntries.AddAsync(entry);
 						await context.SaveChangesAsync();
 					}
+					else
+					{
+						Analytics.TrackEvent("AppMessage SensorEntry no valid entry received");
+					}
 				}
 				else if(message.ContainsKey($"{nameof(SensorEntry)}s") && message[$"{nameof(SensorEntry)}s"] is string listString)
 				{
+					Analytics.TrackEvent("AppMessage SensorEntrys Received");
 					var entries = await Task.Run(() => JsonConvert.DeserializeObject<List<SensorEntry>>(listString));
 					if(entries != null)
 					{
@@ -62,18 +71,30 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 						}
 						await context.SaveChangesAsync();
 					}
+					else
+					{
+						Analytics.TrackEvent("AppMessage SensorEntrys no valid entries received");
+					}
+				}
+				else
+				{
+					Analytics.TrackEvent("AppMessage Unknown Request");
 				}
 
 			}
 			catch(Exception ex)
 			{
-
+				ex.TrackEvent("AppMessage requestReceived Exception");
 			}
 			messageDeferral.Complete();
 		}
 
 		private void canceled(IBackgroundTaskInstance sender, BackgroundTaskCancellationReason reason)
 		{
+			Analytics.TrackEvent("AppMessage Task Canceled", new Dictionary<string, string>
+			{
+				{"Reason", reason.ToString() }
+			});
 			deferral?.Complete();
 		}
 	}

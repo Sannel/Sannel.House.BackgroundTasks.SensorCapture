@@ -1,3 +1,4 @@
+using Microsoft.AppCenter.Analytics;
 using Microsoft.Azure.Mobile.Analytics;
 using Microsoft.EntityFrameworkCore;
 using Sannel.House.Configuration;
@@ -17,7 +18,7 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 	internal class ReadingsManager : IDisposable
 	{
 		private DataContext context;
-		private ConfigurationConnection connection;
+		private Config config;
 		private TCPSensorPacketListener listener;
 		private ServerContext serverContext;
 		private ThreadPoolTimer timer;
@@ -26,53 +27,30 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 
 		public ReadingsManager(
 			DataContext context,
-			ConfigurationConnection configuration,
+			Config config,
 			TCPSensorPacketListener listener)
 		{
 			this.context = context;
 			this.context.Database.Migrate();
-			this.connection = configuration;
+			this.config = config;
 			this.listener = listener;
 		}
 
 		public async Task StartAsync()
 		{
-#if DEBUG
-			uint port = Defaults.Development.SENSOR_BROADCAST_PORT;
-#else
-			uint port = Defaults.Production.SENSOR_BROADCAST_PORT;
-#endif
-			Uri serverUri = null;
-			username = null;
-			password = null;
-
-			using (connection)
-			{
-				if (await connection.ConnectAsync())
-				{
-					var result = await connection.GetConfiguration("ServerApiUrl", "ServerUsername", "ServerPassword", "SensorsPort");
-					Uri.TryCreate(result["ServerApiUrl"] as string, UriKind.Absolute, out serverUri);
-					username = result["ServerUsername"] as string;
-					password = result["ServerPassword"] as string;
-					port = (uint)(result["SensorsPort"] as int? ?? (int)port);
-				}
-			}
-
-			connection = null;
-
 			Analytics.TrackEvent("Configuration", new Dictionary<string, string>()
 			{
-				{"ServerApiUrl", serverUri.ToString() },
-				{"Listen Port", port.ToString() },
-				{"Username", username }
+				{"ServerApiUrl", config.ServiceApiUrl?.ToString() },
+				{"Listen Port", config.Port.ToString() },
+				{"Username", config.Username }
 			});
 
 			listener.PacketReceived += this.packagesReceived;
-			listener.Begin(port);
+			listener.Begin(config.Port);
 
-			if (serverUri != null)
+			if (config.ServiceApiUrl != null)
 			{
-				serverContext = new ServerContext(serverUri);
+				serverContext = new ServerContext(config.ServiceApiUrl);
 				pushToServer(null);
 			}
 		}
@@ -125,6 +103,10 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 								continue; // errored out go to next result
 							}
 						}
+						Analytics.TrackEvent("Entry Type", new Dictionary<string, string>()
+						{
+							{"SensorType", entry?.SensorType.ToString() }
+						});
 						switch (entry.SensorType)
 						{
 							case SensorTypes.Temperature:
@@ -260,7 +242,6 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 
 		public void Dispose()
 		{
-			connection?.Dispose();
 			serverContext?.Dispose();
 			context?.Dispose();
 		}
