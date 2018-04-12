@@ -12,7 +12,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Sannel.House.BackgroundTasks.SensorCapture
+namespace Sannel.House.BackgroundTasks.SensorCapture 
 {
 	internal class Startup
 	{
