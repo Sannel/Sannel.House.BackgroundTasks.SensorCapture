@@ -140,7 +140,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AppCenter.Analytics">
-      <Version>1.5.0</Version>
+      <Version>1.6.0</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore">
       <Version>2.0.2</Version>
@@ -155,26 +155,22 @@
       <Version>2.0.0</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>6.0.8</Version>
+      <Version>6.1.2</Version>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
       <Version>11.0.2</Version>
     </PackageReference>
     <PackageReference Include="Sannel.House">
-      <Version>0.5.1-alpha-0001</Version>
+      <Version>0.6.0-alpha-0002</Version>
     </PackageReference>
     <PackageReference Include="Sannel.House.Configuration">
-      <Version>0.5.13-alpha</Version>
+      <Version>0.5.14-alpha</Version>
     </PackageReference>
     <PackageReference Include="Sannel.House.ServerSDK">
-      <Version>0.2.1-alpha-0001</Version>
+      <Version>0.3.0-alpha-0001</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Sannel.House.SensorCapture.Common\Sannel.House.SensorCapture.Common.csproj">
-      <Project>{b5e19cd6-c029-4dbd-95b2-e5c65c31f01e}</Project>
-      <Name>Sannel.House.SensorCapture.Common</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Sannel.House.SensorCapture.Data\Sannel.House.SensorCapture.Data.csproj">
       <Project>{0e7227d2-109a-450f-8e98-01b5cdc7dbea}</Project>
       <Name>Sannel.House.SensorCapture.Data</Name>
