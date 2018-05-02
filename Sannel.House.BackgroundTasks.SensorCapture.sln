@@ -14,8 +14,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sannel.House.BackgroundTasks.SensorCapture", "src\Sannel.House.BackgroundTasks.SensorCapture\Sannel.House.BackgroundTasks.SensorCapture.csproj", "{65B5CFFB-B93F-4F69-BB08-E8B19806A80F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sannel.House.SensorCaptureSDK", "src\Sannel.House.SensorCaptureSDK\Sannel.House.SensorCaptureSDK.csproj", "{EE6B0B2A-3E60-411B-B314-4AE9D462041C}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sannel.House.SensorCapture.Data", "src\Sannel.House.SensorCapture.Data\Sannel.House.SensorCapture.Data.csproj", "{0E7227D2-109A-450F-8E98-01B5CDC7DBEA}"
 EndProject
 Global
@@ -50,22 +48,6 @@ Global
 		{65B5CFFB-B93F-4F69-BB08-E8B19806A80F}.Release|x86.ActiveCfg = Release|x86
 		{65B5CFFB-B93F-4F69-BB08-E8B19806A80F}.Release|x86.Build.0 = Release|x86
 		{65B5CFFB-B93F-4F69-BB08-E8B19806A80F}.Release|x86.Deploy.0 = Release|x86
-		{EE6B0B2A-3E60-411B-B314-4AE9D462041C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EE6B0B2A-3E60-411B-B314-4AE9D462041C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EE6B0B2A-3E60-411B-B314-4AE9D462041C}.Debug|ARM.ActiveCfg = Debug|ARM
-		{EE6B0B2A-3E60-411B-B314-4AE9D462041C}.Debug|ARM.Build.0 = Debug|ARM
-		{EE6B0B2A-3E60-411B-B314-4AE9D462041C}.Debug|x64.ActiveCfg = Debug|x64
-		{EE6B0B2A-3E60-411B-B314-4AE9D462041C}.Debug|x64.Build.0 = Debug|x64
-		{EE6B0B2A-3E60-411B-B314-4AE9D462041C}.Debug|x86.ActiveCfg = Debug|x86
-		{EE6B0B2A-3E60-411B-B314-4AE9D462041C}.Debug|x86.Build.0 = Debug|x86
-		{EE6B0B2A-3E60-411B-B314-4AE9D462041C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EE6B0B2A-3E60-411B-B314-4AE9D462041C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EE6B0B2A-3E60-411B-B314-4AE9D462041C}.Release|ARM.ActiveCfg = Release|ARM
-		{EE6B0B2A-3E60-411B-B314-4AE9D462041C}.Release|ARM.Build.0 = Release|ARM
-		{EE6B0B2A-3E60-411B-B314-4AE9D462041C}.Release|x64.ActiveCfg = Release|x64
-		{EE6B0B2A-3E60-411B-B314-4AE9D462041C}.Release|x64.Build.0 = Release|x64
-		{EE6B0B2A-3E60-411B-B314-4AE9D462041C}.Release|x86.ActiveCfg = Release|x86
-		{EE6B0B2A-3E60-411B-B314-4AE9D462041C}.Release|x86.Build.0 = Release|x86
 		{0E7227D2-109A-450F-8E98-01B5CDC7DBEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0E7227D2-109A-450F-8E98-01B5CDC7DBEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E7227D2-109A-450F-8E98-01B5CDC7DBEA}.Debug|ARM.ActiveCfg = Debug|Any CPU
@@ -88,7 +70,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{65B5CFFB-B93F-4F69-BB08-E8B19806A80F} = {F84321D6-5C74-4960-AC46-AED4DB263C94}
-		{EE6B0B2A-3E60-411B-B314-4AE9D462041C} = {F84321D6-5C74-4960-AC46-AED4DB263C94}
 		{0E7227D2-109A-450F-8E98-01B5CDC7DBEA} = {F84321D6-5C74-4960-AC46-AED4DB263C94}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution

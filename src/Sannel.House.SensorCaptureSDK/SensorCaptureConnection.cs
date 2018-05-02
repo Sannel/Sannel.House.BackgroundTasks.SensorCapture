@@ -1,6 +1,5 @@
 using Newtonsoft.Json;
 using Sannel.House.Sensor;
-using Sannel.House.SensorCapture.Common;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

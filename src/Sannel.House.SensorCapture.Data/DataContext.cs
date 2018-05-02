@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
+using Sannel.House.Sensor;
 
 namespace Sannel.House.SensorCapture.Data
 {
@@ -23,8 +24,19 @@ namespace Sannel.House.SensorCapture.Data
 		{
 			if (!optionsBuilder.IsConfigured)
 			{
-				optionsBuilder.UseSqlite("Data Source=test.db");
+				optionsBuilder.UseSqlite("Data Source=Data.db");
 			}
+		}
+
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		{
+			modelBuilder.Entity<SensorEntry>(i =>
+			{
+				i.HasKey(j => j.Id);
+				i.Ignore(j => j.ExtraElements);
+				i.Ignore(j => j.DeviceId);
+			});
+
 		}
 	}
 }

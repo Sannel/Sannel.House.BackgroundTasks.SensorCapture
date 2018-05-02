@@ -44,7 +44,7 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 				{"Username", config.Username }
 			});
 
-			listener.PacketReceived += this.packagesReceived;
+			listener.PacketReceived += this.packetReceived;
 			listener.Begin(config.Port);
 
 			if (config.ServiceApiUrl != null)
@@ -53,6 +53,10 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 				pushToServer(null);
 			}
 		}
+
+		private async void packetReceived(object sender, SensorEntryReceivedEventArgs e)
+			=> await ProcessPackatesAsync(e.MacAddress, e.Packets);
+
 		private async void pushToServer(ThreadPoolTimer timer)
 		{
 			Analytics.TrackEvent("Start Push To Server");
@@ -194,28 +198,26 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 			}
 		}
 
-		private async void packagesReceived(object sender, SensorPacketsReceivedEventArgs e) 
-			=> await ProcessPackatesAsync(e.MacAddress, e.Packets);
 
-		public async Task ProcessPackatesAsync(long macAddress, IList<SensorPacket> packets)
+		public async Task ProcessPackatesAsync(long macAddress, IList<SensorEntry> entries)
 		{
 			try
 			{
 				Analytics.TrackEvent("Begin Receiving Packages");
 				uint lastOffset = 0;
 				var lastDateTime = DateTime.UtcNow;
-				for(var i = packets.Count - 1; i >= 0; i--)
+				for(var i = entries.Count - 1; i >= 0; i--)
 				{
-					var p = packets[i];
-					var entry = p.ToSensorEntry(macAddress);
+					var p = entries[i];
+					p.DeviceMacAddress = macAddress;
 
 					if(lastOffset == 0)
 					{
-						entry.CreatedDate = lastDateTime;
+						p.DateCreated = lastDateTime;
 					}
 					else
 					{
-						var differnece = lastOffset - p.MillisOffset;
+						var differnece = lastOffset - p.;
 						lastOffset = p.MillisOffset;
 						lastDateTime = lastDateTime.AddMilliseconds(differnece * -1);
 						entry.CreatedDate = lastDateTime;
