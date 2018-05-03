@@ -1,10 +1,10 @@
+using Microsoft.EntityFrameworkCore.Migrations;
 using System;
 using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Sannel.House.SensorCapture.Data.Migrations
 {
-	public partial class inital : Migration
+	public partial class Inital : Migration
 	{
 		protected override void Up(MigrationBuilder migrationBuilder)
 		{
@@ -13,11 +13,11 @@ namespace Sannel.House.SensorCapture.Data.Migrations
 				columns: table => new
 				{
 					Id = table.Column<Guid>(nullable: false),
-					SensorType = table.Column<string>(nullable: true),
+					DateCreated = table.Column<DateTime>(nullable: false),
 					DeviceMacAddress = table.Column<long>(nullable: true),
 					DeviceUuid = table.Column<Guid>(nullable: true),
-					DateCreated = table.Column<DateTime>(nullable: false),
-					Values = table.Column<string>(nullable: true)
+					SValues = table.Column<string>(nullable: true),
+					SensorType = table.Column<string>(nullable: true)
 				},
 				constraints: table =>
 				{

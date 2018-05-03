@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Sannel.House.Sensor;
 using Newtonsoft.Json;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Sannel.House.SensorCapture.Data
 {
@@ -20,7 +19,7 @@ namespace Sannel.House.SensorCapture.Data
 		{
 		}
 
-		public DbSet<SensorEntry> SensorEntries { get; set; }
+		public DbSet<LocalSensorEntry> SensorEntries { get; set; }
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
@@ -32,18 +31,12 @@ namespace Sannel.House.SensorCapture.Data
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
-			modelBuilder.Entity<SensorEntry>(i =>
+			modelBuilder.Entity<LocalSensorEntry>(i =>
 			{
 				i.HasKey(j => j.Id);
 				i.Ignore(j => j.ExtraElements);
 				i.Ignore(j => j.DeviceId);
-
-				var dictionaryToString = new ValueConverter<IDictionary<string, float>, string>(
-								v => v.ConvertToString(),
-								v => JsonConvert.DeserializeObject<Dictionary<string,float>>(v));
-
-				i.Property(j => j.Values)
-				.HasConversion(dictionaryToString);
+				i.Ignore(j => j.Values);
 			});
 
 		}
