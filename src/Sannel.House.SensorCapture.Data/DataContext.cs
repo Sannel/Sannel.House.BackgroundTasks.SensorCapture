@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Sannel.House.Sensor;
+using Newtonsoft.Json;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Sannel.House.SensorCapture.Data
 {
@@ -35,6 +37,13 @@ namespace Sannel.House.SensorCapture.Data
 				i.HasKey(j => j.Id);
 				i.Ignore(j => j.ExtraElements);
 				i.Ignore(j => j.DeviceId);
+
+				var dictionaryToString = new ValueConverter<IDictionary<string, float>, string>(
+								v => v.ConvertToString(),
+								v => JsonConvert.DeserializeObject<Dictionary<string,float>>(v));
+
+				i.Property(j => j.Values)
+				.HasConversion(dictionaryToString);
 			});
 
 		}
