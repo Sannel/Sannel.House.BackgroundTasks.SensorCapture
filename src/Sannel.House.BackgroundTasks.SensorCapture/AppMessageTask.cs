@@ -49,7 +49,7 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 					if(entry != null)
 					{
 						entry.Id = Guid.NewGuid();
-						await context.SensorEntries.AddAsync(entry);
+						await context.SensorEntries.AddAsync(new LocalSensorEntry(entry));
 						await context.SaveChangesAsync();
 					}
 					else

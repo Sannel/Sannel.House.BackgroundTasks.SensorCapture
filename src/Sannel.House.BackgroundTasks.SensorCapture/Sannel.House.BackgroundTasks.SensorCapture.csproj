@@ -170,7 +170,7 @@
       <Version>0.5.15-alpha</Version>
     </PackageReference>
     <PackageReference Include="Sannel.House.ServerSDK">
-      <Version>0.3.0-alpha-0001</Version>
+      <Version>0.3.0-alpha-0002</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

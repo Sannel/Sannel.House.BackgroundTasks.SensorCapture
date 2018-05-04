@@ -53,28 +53,6 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 
 			var di = new EasClientDeviceInformation();
 
-			var test = new SensorEntry()
-			{
-				Id = Guid.NewGuid(),
-				DeviceUuid = di.Id,
-				SensorType = SensorTypes.Temperature.ToString(),
-				Values = new Dictionary<string, float>()
-				{
-					{"Temperature", 21.345f }
-				}
-			};
-			try
-			{
-				context.SensorEntries.Add(test);
-				context.SaveChanges();
-			}
-			catch(Exception ex)
-			{
-				Analytics.TrackEvent("Exception", new Dictionary<string, string>()
-				{
-					{"Message", ex.ToString() }
-				});
-			}
 
 			if (config.ServiceApiUrl != null)
 			{
