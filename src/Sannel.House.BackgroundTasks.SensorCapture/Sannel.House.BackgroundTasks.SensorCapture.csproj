@@ -164,7 +164,7 @@
       <Version>11.0.2</Version>
     </PackageReference>
     <PackageReference Include="Sannel.House">
-      <Version>0.6.0-alpha-0003</Version>
+      <Version>0.6.0-alpha-0004</Version>
     </PackageReference>
     <PackageReference Include="Sannel.House.Configuration">
       <Version>0.5.15-alpha</Version>

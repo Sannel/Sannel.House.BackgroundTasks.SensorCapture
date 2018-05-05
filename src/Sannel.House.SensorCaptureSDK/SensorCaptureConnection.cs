@@ -61,17 +61,9 @@ namespace Sannel.House.SensorCaptureSDK
 		/// </summary>
 		/// <param name="temperature">The temperature.</param>
 		/// <returns></returns>
-		public IAsyncOperation<bool> SendTemperatureEntry(double temperature)
-		{
-			var se = new SensorEntry()
-			{
-				LocalId = Guid.NewGuid(),
-				SensorType = SensorTypes.Temperature,
-				Uuid = SystemId,
-				Value = temperature
-			};
-			return sendAsync(se).AsAsyncOperation();
-		}
+		public IAsyncOperation<bool> SendTemperatureEntry(float temperature) 
+			=> sendAsync(SensorHelper.Temperature.Create(temperature, SystemId))
+			.AsAsyncOperation();
 
 		/// <summary>
 		/// Sends the THP.
@@ -80,19 +72,9 @@ namespace Sannel.House.SensorCaptureSDK
 		/// <param name="humidity">The humidity.</param>
 		/// <param name="pressure">The pressure.</param>
 		/// <returns></returns>
-		public IAsyncOperation<bool> SendTHP(double temperature,double humidity, double pressure)
-		{
-			var se = new SensorEntry()
-			{
-				LocalId = Guid.NewGuid(),
-				SensorType = SensorTypes.Temperature,
-				Uuid = SystemId,
-				Value = temperature,
-				Value2 = humidity,
-				Value3 = pressure
-			};
-			return sendAsync(se).AsAsyncOperation();
-		}
+		public IAsyncOperation<bool> SendTHP(float temperature, float humidity, float pressure)
+			=> sendAsync(SensorHelper.THP.Create(temperature, humidity, pressure, SystemId))
+			.AsAsyncOperation();
 
 		/// <summary>
 		/// Sends the asynchronous.
