@@ -7,20 +7,17 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AppCenter.Analytics" Version="1.5.0" />
+	  <Compile Remove="Models\**" />
+	  <EmbeddedResource Remove="Models\**" />
+	  <None Remove="Models\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.0.2" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.0.2" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.0.2" />
 		<PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
-		<PackageReference Include="Sannel.House" Version="0.5.1-alpha-0001" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Models\" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <ProjectReference Include="..\Sannel.House.SensorCapture.Common\Sannel.House.SensorCapture.Common.csproj" />
+		<PackageReference Include="Sannel.House" Version="0.6.0-alpha-0004" />
 	</ItemGroup>
 
 </Project>

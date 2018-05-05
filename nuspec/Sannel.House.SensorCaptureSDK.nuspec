@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Sannel.House.SensorCaptureSDK</id>
-    <version>0.0.1</version>
+    <version>0.0.1-alpha-0001</version>
     <authors>Adam Holt</authors>
     <owners>Adam Holt</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -15,10 +15,8 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="..\src\Sannel.House.SensorCaptureSDK\bin\Release\Sannel.House.SensorCapture.Common.dll" target="lib\uap10.0\Sannel.House.SensorCapture.Common.dll" />
-    <file src="..\src\Sannel.House.SensorCaptureSDK\bin\Release\Sannel.House.SensorCapture.Common.pdb" target="lib\uap10.0\Sannel.House.SensorCapture.Common.pdb" />
-    <file src="..\src\Sannel.House.SensorCaptureSDK\bin\Release\Sannel.House.SensorCaptureSDK.pdb" target="lib\uap10.0\Sannel.House.SensorCaptureSDK.pdb" />
-    <file src="..\src\Sannel.House.SensorCaptureSDK\bin\Release\Sannel.House.SensorCaptureSDK.pri" target="lib\uap10.0\Sannel.House.SensorCaptureSDK.pri" />
-    <file src="..\src\Sannel.House.SensorCaptureSDK\bin\Release\Sannel.House.SensorCaptureSDK.winmd" target="lib\uap10.0\Sannel.House.SensorCaptureSDK.winmd" />
+    <file src="..\src\Sannel.House.SensorCaptureSDK\bin\Debug\Sannel.House.SensorCaptureSDK.pdb" target="lib\uap10.0\Sannel.House.SensorCaptureSDK.pdb" />
+    <file src="..\src\Sannel.House.SensorCaptureSDK\bin\Debug\Sannel.House.SensorCaptureSDK.pri" target="lib\uap10.0\Sannel.House.SensorCaptureSDK.pri" />
+    <file src="..\src\Sannel.House.SensorCaptureSDK\bin\Debug\Sannel.House.SensorCaptureSDK.winmd" target="lib\uap10.0\Sannel.House.SensorCaptureSDK.winmd" />
   </files>
 </package>

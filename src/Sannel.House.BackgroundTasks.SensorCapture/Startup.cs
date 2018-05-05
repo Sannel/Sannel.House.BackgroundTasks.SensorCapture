@@ -3,6 +3,7 @@ using Microsoft.AppCenter.Analytics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Sannel.House.Configuration;
+using Sannel.House.Configuration.Common;
 using Sannel.House.Sensor;
 using Sannel.House.SensorCapture.Data;
 using System;
@@ -74,6 +75,7 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 			{
 				if(await con.ConnectAsync() == Windows.ApplicationModel.AppService.AppServiceConnectionStatus.Success)
 				{
+
 					var result = await con.GetConfiguration("SensorCaptureAppSecret",
 															"ServerApiUrl", 
 															"ServerUsername", 

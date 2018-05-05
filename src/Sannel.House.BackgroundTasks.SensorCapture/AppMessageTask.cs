@@ -10,7 +10,6 @@ using Windows.ApplicationModel.Background;
 using Microsoft.Extensions.DependencyInjection;
 using Windows.Devices.WiFi;
 using Windows.Networking.Connectivity;
-using Sannel.House.SensorCapture.Common;
 using Sannel.House.SensorCapture.Data;
 using Microsoft.AppCenter.Analytics;
 using Sannel.House.Configuration.Common;
@@ -49,8 +48,8 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 					var entry = await Task.Run(() => JsonConvert.DeserializeObject<SensorEntry>(data));
 					if(entry != null)
 					{
-						entry.LocalId = Guid.NewGuid();
-						await context.SensorEntries.AddAsync(entry);
+						entry.Id = Guid.NewGuid();
+						await context.SensorEntries.AddAsync(new LocalSensorEntry(entry));
 						await context.SaveChangesAsync();
 					}
 					else
@@ -66,7 +65,7 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 					{
 						foreach(var e in entries)
 						{
-							e.LocalId = Guid.NewGuid();
+							e.Id = Guid.NewGuid();
 							await context.SensorEntries.AddAsync(e);
 						}
 						await context.SaveChangesAsync();

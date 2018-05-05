@@ -42,7 +42,7 @@ namespace Sannel.House.BackgroundTasks.SensorCapture
 			Analytics.TrackEvent("BackgroundTask Started");
 
 			manager = v.Provider.GetService<ReadingsManager>();
-			await manager.StartAsync();
+			manager.Start();
 		}
 
 		private void onCanceled(IBackgroundTaskInstance sender, BackgroundTaskCancellationReason reason)
