@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Sannel.House.SensorCaptureSDK</id>
-    <version>0.0.1-alpha-0001</version>
+    <version>0.0.1-alpha-0002</version>
     <authors>Adam Holt</authors>
     <owners>Adam Holt</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>

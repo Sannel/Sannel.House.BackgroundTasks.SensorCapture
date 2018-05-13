@@ -108,6 +108,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SensorCaptureConnection.cs" />
+    <Compile Include="ISensorEntry.cs" />
     <EmbeddedResource Include="Properties\Sannel.House.SensorCaptureSDK.rd.xml" />
   </ItemGroup>
   <ItemGroup>

@@ -1,3 +1,16 @@
+/* Copyright 2018 Sannel Software, L.L.C.
+
+	Licensed under the Apache License, Version 2.0 (the ""License"");
+	you may not use this file except in compliance with the License.
+	You may obtain a copy of the License at
+
+		http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software
+	distributed under the License is distributed on an ""AS IS"" BASIS,
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	See the License for the specific language governing permissions and
+	limitations under the License.*/
 using Newtonsoft.Json;
 using Sannel.House.Sensor;
 using System;
@@ -75,6 +88,20 @@ namespace Sannel.House.SensorCaptureSDK
 		public IAsyncOperation<bool> SendTHP(float temperature, float humidity, float pressure)
 			=> sendAsync(SensorHelper.THP.Create(temperature, humidity, pressure, SystemId))
 			.AsAsyncOperation();
+
+		/// <summary>
+		/// Sends an enumerable of entries
+		/// </summary>
+		/// <param name="entries">The entries.</param>
+		/// <returns></returns>
+		public IAsyncOperation<bool> SendEntriesAsync(IEnumerable<ISensorEntry> entries) 
+			=> Task.Run(async () =>
+			{
+				var vs = new ValueSet();
+				await Task.Run(() => vs[$"{nameof(SensorEntry)}s"] = JsonConvert.SerializeObject(entries));
+				var result = await connection.SendMessageAsync(vs);
+				return result.Status == AppServiceResponseStatus.Success;
+			}).AsAsyncOperation();
 
 		/// <summary>
 		/// Sends the asynchronous.
